@@ -1,4 +1,5 @@
-import {ProductManager} from './productManager1.js'
+//En la primer linea importo la Clase ProductManager, chequear en VSCode que cuando pones el mouse encima te aparezca una referencia a la clase.
+import ProductManager from './productManager1.js'
 import express from 'express';
 
 const app = express();//Express es el módulo ya instalado, sin embargo, para poder tener andando nuestra app, debemos inicializar el módulo "express" con la siguiente linea...
@@ -10,16 +11,17 @@ let productManager= new ProductManager()
 // a partir de aquí nuestra app contendrá todas las funcionalidades de express..
   
     app.get('/products/query',(request,response)=>{
-        let limit = request.query;
-        const prod = productManager.getProducts() ;
+        //Cuando hago esta notacion asumo que existe una propiedad o key 'limit' en el objeto request.query
+        let {limit} = request.query;
+        //Asigno a prod lo que llega de la lectura o un array vacío puesto que .slice() es un metodo que se ejecuta sobre un array
+        const prod = productManager.getProducts() || [];
         if(limit){
             function limitar(prod,limite){
-                return prod.slice(0,limite)
+                return prod.slice(0,limite);
             }
-            response.send(limitar(prod,1))
+            response.send(limitar(prod,limit))
         }
         response.send(prod)
-     
     });
 
     app.get('/products/:userId',(request,response)=>{
