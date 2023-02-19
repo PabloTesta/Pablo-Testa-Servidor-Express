@@ -18,6 +18,7 @@ let persisitirUsuario= async (response)=>{
         response.status(400).send('Error guardando usuario');
     }
   }
+
   router.get ('/', async (request,response)   => {
     console.log('Llamando a crear usuario');
     let result = await persisitirUsuario(response);

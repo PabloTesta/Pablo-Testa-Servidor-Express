@@ -6,7 +6,7 @@ const SERVER_PORT= 8080;
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))// ahora usando querys, una vez escrita la linea que nos permite usar querys //esta nos permitirá utilizar url's mas complicadas y que el node no nos salte con errors
 
-app.use("api/products",productsRouter)
+app.use("api/products",productsRouter);
 
 app.listen(SERVER_PORT,()=>{
     console.log(`Servidor escuchando en el puerto ${SERVER_PORT}`);
