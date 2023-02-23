@@ -142,6 +142,9 @@ export class ProductManager {
       console.log('No se pudo eliminar el producto');
     }
   }
+  updatedJson=async()=>{
+    this.#fileSystem.promises.writeFile(this.#filePath,JSON.stringify(this.#products))
+  }
 }
 
 class Productos {

@@ -38,22 +38,41 @@ router.get('/api/products',async(request,response)=>{
         response.status(400).send({error:400,message:"No existe un producto con ese id"})
         }
     });
-    router.delete('/api/product/:userId', (request,response)=>{
-        console.log('-------------Consumiendo api DELETE /api/user..---------------');
+    app.delete('/api/product/:productId',async (request,response)=>{
         console.log(request.params);
-        let userId=parseInt(request.params.userId);
-        console.log(`Buscando Usuario a eliminar por ${request.params}`);
-        const usersSize=users.length;
-        const userPosition= users.findIndex((u=>u.id===userId))
-        if(userPosition<0){
-            return response.status(202).send({status:'info', error:'Usuario no encontrado'});
-        }
-        console.log('Usuario encontrado para eliminar');
-        console.log(users[userPosition]);
-        users.splice(userPosition,1);
-        if(users.length===usersSize){
-            return response.status(500).send({status:"error",message:"El servidor no pudo borrar el usuario"})
-        }
-        return response.send({status:"Success",message:"Usuario Eliminado"});
-    })
+        let Id=parseInt(request.params.productId)
+        console.log(Id);
+         productManager.deleteProduct(Id);
+         return response.send('Usuario eliminado')
+        });
+
+        app.put('/api/product/:productId',async(request,response)=>{
+            console.log('---------Consumiendo api PUT /api/user..-------');
+            console.log(request.params);
+            let Id=parseInt(request.params.productId)
+            const products= JSON.parse(await productManager.getProducts());
+            let userUpdated = request.body;//No entiendo bien que hace acá. Trae el usuario que creamos con POST? 
+            console.log('Mostrando  que es request.body que traemos: ');
+            console.log(request.body);
+            console.log(`Buscando usuario a modificar en la siguiente linea con el id:  ${Id}`);
+            const userPosition= products.findIndex((u=>u.id===Id))
+            console.log('mostrando el usuario encontrado: ');
+            console.log(products[userPosition]);
+            if(userPosition<0){
+                return response.status(202).send({status:'info', error:'Usuario no encontrado'});
+            }
+            console.log('modificando Usuario');
+            console.log(products[userPosition]);
+            userUpdated.id=products[userPosition].id;
+            console.log('-----------------');
+            console.log(products[userPosition].id);
+            products[userPosition]=userUpdated;
+            console.log(userUpdated);
+            console.log('Usuarios Actuales:------');
+            console.log(products);
+            //Notar que la linea de abajo quiero modificar el products.json, sin embargo me deja un array vacío 
+            productManager.updatedJson(JSON.stringify(products));
+            return response.send({status:"Success", message:"Usuario Encontrado y Actualizado"})
+        
+            });
 export default router;
