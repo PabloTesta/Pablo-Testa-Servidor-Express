@@ -1,6 +1,7 @@
 import fs from 'fs'
 export class CartManager {
   #products;
+  #cart;
   #dirPath;
   #filePath;
   #fileSystem= fs
@@ -15,7 +16,7 @@ export class CartManager {
     let newCart = {
       products: []
     }
-    
+    newCart.id= Math.floor(Math.random()*20+1)
     try {
       await this.#fileSystem.promises.mkdir(this.#dirPath, { recursive: true });
       if (!this.#fileSystem.existsSync(this.#filePath)) {
@@ -140,7 +141,7 @@ export class CartManager {
             this.cart[pos].products[productPosition].quantity = quantity++
         }
 
-        await this.#fileSystem.promises.writeFile(this.#cartFilePath, JSON.stringify(this.cart));
+        await this.#fileSystem.promises.writeFile(this.#filePath, JSON.stringify(this.cart));
           }catch (error){
             console.error("Error al consultar los carts");
                   throw Error(`Error al consultar los carts, detalle del error ${error}`);

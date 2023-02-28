@@ -19,7 +19,7 @@ export class ProductManager {
       code,
       stock
     );
-    
+    nuevoProducto.id= Math.floor(Math.random()*20+1)
     try {
       await this.#fileSystem.promises.mkdir(this.#dirPath, { recursive: true });
       if (!this.#fileSystem.existsSync(this.#filePath)) {

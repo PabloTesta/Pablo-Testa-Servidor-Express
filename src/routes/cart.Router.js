@@ -5,8 +5,8 @@ import { CartManager } from '../cartManager.js'
 const router = Router();
 const cartManager= new CartManager();
 const productManager= new ProductManager();
-
 router.post("/", async (request, response) =>{
+    
     const newCart = request.body;
     try{
         
