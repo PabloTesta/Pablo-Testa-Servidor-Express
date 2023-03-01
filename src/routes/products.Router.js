@@ -70,7 +70,7 @@ router.get('/',async(request,response)=>{
             console.log('Usuarios Actuales:------');
             console.log(products);
             //Notar que la linea de abajo quiero modificar el products.json, sin embargo me deja un array vacío 
-            productManager.updatedJson(JSON.stringify(products));
+            productManager.updatedJson(products);
             return response.send({status:"Success", message:"Usuario Encontrado y Actualizado"})
         
             });
