@@ -7,10 +7,10 @@ const cartManager= new CartManager();
 const productManager= new ProductManager();
 router.post("/", async (request, response) =>{
     
-    const newCart = request.body;
+    const newCarts = request.body;
     try{
         
-        await cartManager.addCart(newCart)
+        await cartManager.addCart(newCarts)
         response.status(201).send({message: "Cart creado con éxito!"});
     } catch(error){
         console.log("Error al guardar el cart. Error: " + error); 
@@ -20,8 +20,13 @@ router.post("/", async (request, response) =>{
 
 router.get("/:cartId", async (request, response) =>{
     const cart = await cartManager.getCart();
-    const cartId = cart.find(c => c.idCart == request.params.cartId);
+    console.log('MOSTRAMOS CART');
+     console.log(JSON.stringify(cart)); 
+    const cartId = cart.filter(c => c.idCart == request.params.cartId);
+    console.log('MOSTRAMOS CART ID: ');
+     console.log(JSON.stringify(cartId));
     if(cartId){
+        console.log('--------------------');
         response.send(JSON.stringify(cartId));
     }else{
         response.status(400).send({error: "400", message: "El id ingresado es inválido o no existe"});
@@ -33,15 +38,15 @@ router.post("/:cartId/product/:prodId", async (request, response) =>{
     const prodId = parseInt(request.params.prodId);
     const cartId = parseInt(request.params.cartId);
 
-    const prod = await productManager.getProducts();
-    const cart = await cartManager.getCarts();
+    const prod = JSON.parse(await productManager.getProducts());
+    const cart = await cartManager.getCart();
 
     const body = request.body;
 
     let quantity = parseInt(body["quantity"])
-
-    const productPosition = prod.findIndex(p => p.id == prodId)
-    const cartPosition = cart.findIndex(c => c.idCart == cartId)
+    console.log(quantity);
+    const productPosition = prod.findIndex(p => p.id === prodId)
+    const cartPosition = cart.findIndex(c => c.idCart === cartId)
 
     if(cartPosition < 0){
         return response.status(400).send({status: "info", message: "Cart no encontrado"})

@@ -12,11 +12,11 @@ export class CartManager {
     this.idCart=1; 
     
   }
-  addCart = async () => {
+  addCart = async (newCarts) => {
     let newCart = {
-      products: []
+      products: [newCarts]
     }
-    newCart.id= Math.floor(Math.random()*20+1)
+    
     try {
       await this.#fileSystem.promises.mkdir(this.#dirPath, { recursive: true });
       if (!this.#fileSystem.existsSync(this.#filePath)) {
@@ -27,15 +27,14 @@ export class CartManager {
         this.#filePath,
         "utf-8"
       ); 
-      //Cargamos los usuarios encontrados para agregar el nuevo
-      //obtenemos el JSON string
+      
       console.info("Archivo JSON obtenido desde archivo: ");
       console.log(cartFile); 
-       this.#cart = JSON.parse(cartFile);  // notar que aquí puede ser el error que indica el profe..
-      /* console.log("Productos encontrados: ");*/
-      console.log(this.#cart); 
+       this.#cart = JSON.parse(cartFile);  
+      
+      console.log(JSON.stringify(this.#cart)); 
 
-      while (this.cart.some(cart => cart.idCart === this.idCart)){
+      while (this.#cart.some(cart => cart.idCart === this.idCart)){
         this.idCart++;
     } 
     newCart.idCart = this.idCart;
@@ -53,7 +52,7 @@ export class CartManager {
       }, detalle del error: ${error}`);
     }
   };
-   getCarts = async () => {
+   getCart = async () => {
     try {
       //Creamos el directorio
       await this.#fileSystem.promises.mkdir(this.#dirPath, { recursive: true });
@@ -70,8 +69,9 @@ export class CartManager {
       console.log(cartFile);
       this.#products = JSON.parse(cartFile);  
       console.log("Productos encontrados: ");
-      console.log(this.#cart);
-      return (cartFile)
+      /* console.log(this.#cart); */
+      console.log(JSON.stringify(this.#products));
+      return (this.#products)
       
     } catch (error) {
       console.error(`Error consultando el carrito por archivo, valide el archivo: ${
