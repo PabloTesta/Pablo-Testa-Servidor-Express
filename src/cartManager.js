@@ -124,10 +124,11 @@ export class CartManager {
             console.log(cartFile);
               this.#cart = JSON.parse(cartFile);
               console.log("Productos encontrados: ");
-              console.log(this.#cart); 
+              console.log(JSON.stringify(this.#cart)); 
 
               let cart = this.#cart[pos]
-
+              console.log('MOSTRANDO CART: ');
+              console.log(cart);
         const productPosition = cart.products.findIndex(p => p.prodId == prodId)
 
         if(productPosition <0){
