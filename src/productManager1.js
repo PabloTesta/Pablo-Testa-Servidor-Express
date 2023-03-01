@@ -19,22 +19,26 @@ export class ProductManager {
       code,
       stock
     );
-    nuevoProducto.id= Math.floor(Math.random()*20+1)
+    nuevoProducto.id= Math.floor(Math.random()*20+1);
     try {
       await this.#fileSystem.promises.mkdir(this.#dirPath, { recursive: true });
       if (!this.#fileSystem.existsSync(this.#filePath)) {
         await this.#fileSystem.promises.writeFile(this.#filePath, "[]");
-      }
+        }
+        
       //leemos el archivo
        let productsFile = await this.#fileSystem.promises.readFile(
         this.#filePath,
         "utf-8"
       ); 
-      //Cargamos los usuarios encontrados para agregar el nuevo
+            //Cargamos los usuarios encontrados para agregar el nuevo
       //obtenemos el JSON string
        console.info("Archivo JSON obtenido desde archivo: ");
       console.log(productsFile); 
        this.#products = JSON.parse(productsFile);  // notar que aquí puede ser el error que indica el profe..
+       if (this.#products.some(p=>p.code===nuevoProducto.code )){
+        throw Error ('El producto que quiere agregar es parecido o igual a uno que ya se encuentra en la base de datos')
+      }
       /* console.log("Productos encontrados: ");
       console.log(this.#products); */
       this.#products.push(nuevoProducto);
@@ -147,13 +151,13 @@ export class ProductManager {
 }
 
 class Productos {
-   static id=0 
+   
   constructor(title, description, price, thumbnail, code, stock) {
     this.title = title;
     this.description = description;
     this.price = price;
     this.thumbnail = thumbnail;
-     this.id=Productos.id++ 
+     
     this.code = code;
     this.stock = stock;
   }
