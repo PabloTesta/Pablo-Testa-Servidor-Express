@@ -37,14 +37,15 @@ router.post("/:cartId/product/:prodId", async (request, response) =>{
 
     const prodId = parseInt(request.params.prodId);
     const cartId = parseInt(request.params.cartId);
-
+console.log(prodId);
+console.log(cartId);
     const prod = JSON.parse(await productManager.getProducts());
     const cart = await cartManager.getCart();
 
-    const body = request.body;
-
-    let quantity = parseInt(body["quantity"])
-    console.log(quantity);
+     const body = request.body;
+      console.log('Mostrando Quantity: ');
+    let quantity = JSON.stringify(body["quantity"]);
+    console.log(quantity);  
     const productPosition = prod.findIndex(p => p.id === prodId)
     const cartPosition = cart.findIndex(c => c.idCart === cartId)
 
@@ -56,7 +57,7 @@ router.post("/:cartId/product/:prodId", async (request, response) =>{
         return response.status(400).send({status: "info", message: "Product no encontrado"})
     }
 
-    cartManager.añadirCart(cartId, prodId, quantity, cartPosition)
+    cartManager.añadirCart(prodId,quantity, cartPosition)
     return response.send({status: "Success", message: "Carrito Actualizado.", data: cart[cartPosition]});
 })
 

@@ -14,7 +14,7 @@ export class CartManager {
   }
   addCart = async (newCarts) => {
     let newCart = {
-      products: [newCarts]
+      products: []
     }
     
     try {
@@ -110,7 +110,7 @@ export class CartManager {
       
       }
 
-      añadirCart = async(cartId, prodId, quantity, pos)=>{
+      añadirCart = async(prodId,quantity, pos)=>{
         try{
           await this.#fileSystem.promises.mkdir(this.#dirPath, { recursive: true });
           if (!this.#fileSystem.existsSync(this.#filePath)) {
@@ -129,20 +129,21 @@ export class CartManager {
               let cart = this.#cart[pos]
               console.log('MOSTRANDO CART: ');
               console.log(cart);
-        const productPosition = cart.products.findIndex(p => p.prodId == prodId)
-
+        const productPosition = cart.products.findIndex(p => p.prodId === prodId)
+        console.log(productPosition);
+        
         if(productPosition <0){
-            let newProduct = {
+            let product = {
                 prodId: prodId,
                 quantity: 1
             }
-            this.cart[pos].products.push(newProduct)
+            this.#cart[pos].products.push(product)
         }else{
             
-            this.cart[pos].products[productPosition].quantity = quantity++
+            this.#cart[pos].products[productPosition].quantity = quantity++
         }
 
-        await this.#fileSystem.promises.writeFile(this.#filePath, JSON.stringify(this.cart));
+        await this.#fileSystem.promises.writeFile(this.#filePath, JSON.stringify(this.#cart));
           }catch (error){
             console.error("Error al consultar los carts");
                   throw Error(`Error al consultar los carts, detalle del error ${error}`);
